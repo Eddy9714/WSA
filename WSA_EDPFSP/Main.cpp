@@ -2,7 +2,7 @@
 
 using namespace std;
 
-using chrono::milliseconds;
+using chrono::microseconds;
 using chrono::system_clock;
 using chrono::duration_cast;
 
@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
 	int position = path.find_last_of(".");
 	string pathNoExt = path.substr(0, position);
 
-	auto time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+	auto time = duration_cast<microseconds>(system_clock::now().time_since_epoch()).count();
 	position = pathNoExt.find_last_of("/");
 	string filename = pathNoExt.substr(position + 1);
 
