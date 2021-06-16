@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
 	auto start = chrono::high_resolution_clock::now();
 	vector<MPoint<Solution*, Point<double>>> population = executor.run(populationSize, nfes, alpha, beta, seed);
 	auto end = chrono::high_resolution_clock::now();
-	chrono::duration<double> elapsed = start - end;
+	chrono::duration<double> elapsed = end - start;
 	
 	int position = path.find_last_of(".");
 	string pathNoExt = path.substr(0, position);

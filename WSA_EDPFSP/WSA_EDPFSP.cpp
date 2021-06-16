@@ -63,8 +63,6 @@ vector<MPoint<Solution*, Point<double>>> WSA_EDPFSP::run(unsigned short populati
 	delete population[populationSize + 1].x;
 	population.resize(population.size() - 2);
 
-	print(population);
-
 	return population;
 }
 
