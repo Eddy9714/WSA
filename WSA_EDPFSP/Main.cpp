@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 		
 	WSA_EDPFSP executor(path);
 
-	nfes = executor.instance.factories * executor.instance.machines * executor.instance.jobs * 50;
+	nfes = executor.instance.factories * executor.instance.machines * executor.instance.jobs * 100;
 
 	auto start = chrono::high_resolution_clock::now();
 	vector<MPoint<Solution*, Point<double>>> population = executor.run(populationSize, nfes, alpha, beta, seed);
