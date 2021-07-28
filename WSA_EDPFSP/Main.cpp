@@ -6,8 +6,8 @@ using chrono::microseconds;
 using chrono::system_clock;
 using chrono::duration_cast;
 
-//namespace fs = filesystem;
-namespace fs = experimental::filesystem;
+namespace fs = filesystem;
+//namespace fs = experimental::filesystem;
 
 int main(int argc, char* argv[])
 {

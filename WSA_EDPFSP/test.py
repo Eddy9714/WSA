@@ -1,5 +1,6 @@
 from subprocess import Popen
 from subprocess import DEVNULL, STDOUT
+
 import glob
 import os
 import sys
@@ -59,10 +60,11 @@ def main(argv):
     procs = []
 
     for command in commands:
+        print (command)
         trialsRemaining = trialsPerIstance
 
         for i in range(trialsRemaining):
-            procs.append(Popen(command, stdout=DEVNULL, stderr=DEVNULL, shell=True))
+            procs.append(Popen(command, stderr=DEVNULL, shell=True))
             processorsAvailable = processorsAvailable - 1
 
             if processorsAvailable == 0:
