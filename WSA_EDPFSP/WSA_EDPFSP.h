@@ -33,7 +33,6 @@ class WSA_EDPFSP {
 		vector<vector<Point<double>>> o;
 
 		InfoFactories info;
-		const Instance instance;
 		vector<function<void(Solution*)>> lsFunctions;
 
 		void initPopulation(vector<MPoint<Solution*, Point<double>>>&, unsigned short, unsigned int&);
@@ -73,6 +72,7 @@ class WSA_EDPFSP {
 
 		vector<MPoint<Solution*, Point<double>>> run(unsigned short, unsigned int, double, double, unsigned int);
 
+		const Instance instance;
 		void print(vector<MPoint<Solution*, Point<double>>>&);
 		void rawPrint(vector<MPoint<Solution*, Point<double>>>&);
 };

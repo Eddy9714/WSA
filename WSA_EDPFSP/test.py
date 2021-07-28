@@ -8,7 +8,7 @@ import getopt
 
 def main(argv):
     maxProcessors = 5
-    trialsPerIstance = 20
+    trialsPerIstance = 10
     exePath = ""
     instancesPath = ""
     funcParams = None
