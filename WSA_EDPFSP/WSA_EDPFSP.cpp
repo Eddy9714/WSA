@@ -409,7 +409,7 @@ WSA_EDPFSP::InfoFactories* WSA_EDPFSP::evalSolution(Solution* solution, unsigned
 			info.worstFactoryIndex = f;
 			info.score.x = output.x;
 		}
-		
+
 		info.score.y += output.y;
 	}
 
@@ -428,7 +428,7 @@ Point<double> WSA_EDPFSP::evalPartialSolution(Solution* solution, vector<unsigne
 
 		job = solution->permutation[factory[i]];
 
-		for (unsigned short j = 0; j < solution->nM; j++) {
+		for (unsigned short j = 0; j < instance.machines; j++) {
 
 			realExecutionTime = instance.pt[job][j] / instance.v[solution->velocities[j][job]];
 			energy += realExecutionTime * instance.pV[solution->velocities[j][job]];
@@ -455,7 +455,7 @@ Point<double> WSA_EDPFSP::evalPartialSolution(Solution* solution, vector<unsigne
 		}
 	}
 
-	double makeSpan = c[solution->nM - 1];
+	double makeSpan = c[instance.machines - 1];
 
 	return { makeSpan , energy };
 }
@@ -1015,6 +1015,7 @@ void WSA_EDPFSP::ECFFS(Solution* solution) {
 }
 
 void WSA_EDPFSP::exploitation(MPoint<Solution*, Point<double>>& solution) {
+
 	double eImprovement = 0, partialEImprovement;
 
 	for (unsigned short i = 0; i < info.positions.size(); i++) {
@@ -1023,22 +1024,20 @@ void WSA_EDPFSP::exploitation(MPoint<Solution*, Point<double>>& solution) {
 		eImprovement += partialEImprovement;
 	}
 
-	unsigned int tmp = 0;
-
 	info.score.y -= eImprovement;
+
 }
 
 double WSA_EDPFSP::partialExploitation(Solution* solution, vector<unsigned short>& factory) {
 
-	unsigned short job, speed, i, j;
-	double realExecutionTime, extTime, deltaTime, macStart, macEnd, jobStart, jobEnd;
+	unsigned short job, speed;
+	double realExecutionTime, extTime, deltaTime;
 
 	double gain = 0;
 
-
-	for (i = 0; i < factory.size(); i++) {
-		job = solution->permutation[factory[i]];
-		for (j = 0; j < instance.machines; j++) {
+	for (unsigned short j = 0; j < instance.machines; j++) {
+		for (unsigned short i = 0; i < factory.size(); i++) {
+			job = solution->permutation[factory[i]];
 
 			realExecutionTime = instance.pt[job][j] / instance.v[solution->velocities[j][job]] + instance.s[job][j];
 
@@ -1058,29 +1057,22 @@ double WSA_EDPFSP::partialExploitation(Solution* solution, vector<unsigned short
 				o[i][j].x = max(o[i][j - 1].y, o[i - 1][j].y);
 				o[i][j].y = o[i][j].x + realExecutionTime;
 			}
-		}
-	}
 
-	for (i = 0; i < factory.size() - 1; i++) {
+			if (i != factory.size() - 1 && j != 0) {
 
-		job = solution->permutation[factory[i]];
+				speed = solution->velocities[j - 1][job];
 
-		for (j = 0; j < instance.machines - 1; j++) {
+				if (speed > 0) {
+					extTime = min(o[i + 1][j - 1].x - o[i][j - 1].y, o[i][j].x - o[i][j - 1].y);
 
-			speed = solution->velocities[j][job];
+					if (extTime != 0) {
+						deltaTime = instance.pt[job][j - 1] * (1 / instance.v[speed - 1] - 1 / instance.v[speed]);
+						if (extTime >= deltaTime) {
 
-			if (speed > 0) {
-				extTime = min(o[i + 1][j].x - o[i][j].y, o[i][j + 1].x - o[i][j].y);
-
-				if (extTime != 0) {
-					deltaTime = instance.pt[job][j] * (1 / instance.v[speed - 1] - 1 / instance.v[speed]);
-					if (extTime >= deltaTime) {
-
-						solution->velocities[j][job]--;
-						gain += instance.pt[job][j] *
-							(instance.pV[speed] / instance.v[speed] - instance.pV[speed - 1] / instance.v[speed - 1]);
-
-						gain += deltaTime * instance.ip[j];
+							solution->velocities[j - 1][job]--;
+							gain += instance.pt[job][j - 1] * (instance.pV[speed] / instance.v[speed] - instance.pV[speed - 1] / instance.v[speed - 1]);
+							gain += deltaTime * instance.ip[j - 1];
+						}
 					}
 				}
 			}
