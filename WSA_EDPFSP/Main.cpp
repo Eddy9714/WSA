@@ -11,7 +11,7 @@ namespace fs = experimental::filesystem;
 
 int main(int argc, char* argv[])
 {
-	unsigned int nfes = 100000;
+	unsigned int nfes = 0;
 	unsigned short populationSize = 100;
 	unsigned int seed = 0;
 	double alpha = 0.9;
@@ -31,6 +31,8 @@ int main(int argc, char* argv[])
 	}
 		
 	WSA_EDPFSP executor(path);
+
+	nfes = executor.instance.factories * executor.instance.machines * executor.instance.jobs * 100;
 
 	auto start = chrono::high_resolution_clock::now();
 	vector<MPoint<Solution*, Point<double>>> population = executor.run(populationSize, nfes, alpha, beta, seed);

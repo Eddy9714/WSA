@@ -1,13 +1,21 @@
 from subprocess import Popen
 from subprocess import DEVNULL, STDOUT
+
+import multiprocessing
+from multiprocessing import Pool
+
 import glob
 import os
 import sys
 import getopt
 
+def worker(command):
+    p = Popen(command, stderr=DEVNULL, shell=True)
+    p.wait()
+
 def main(argv):
-    maxProcessors = 5
-    trialsPerIstance = 20
+    maxProcessors = None
+    trialsPerIstance = 10
     exePath = ""
     instancesPath = ""
     funcParams = None
@@ -38,6 +46,8 @@ def main(argv):
         elif opt == "-f":
             funcParams = arg
 
+    maxProcessors = maxProcessors if maxProcessors is not None else multiprocessing.cpu_count()
+
     print("Il test verrà eseguito con i seguenti parametri:")
     print("Percorso eseguibile: {0}".format(exePath))
     print("Percorso istanze: {0}".format(instancesPath))
@@ -55,20 +65,16 @@ def main(argv):
     else:
         commands = ["{0} {1}".format(exePath, instance) for instance in instances]
 
-    processorsAvailable = maxProcessors
-    procs = []
+
+    pool = Pool(maxProcessors)
+    results = []
 
     for command in commands:
-        trialsRemaining = trialsPerIstance
+        for i in range(trialsPerIstance):
+            results.append(pool.apply_async(worker, args=(command,)))
 
-        for i in range(trialsRemaining):
-            procs.append(Popen(command, stdout=DEVNULL, stderr=DEVNULL, shell=True))
-            processorsAvailable = processorsAvailable - 1
-
-            if processorsAvailable == 0:
-                procs[0].wait()
-                processorsAvailable = processorsAvailable + 1
-                procs = procs[1:]
+    pool.close()
+    pool.join()
 
 if __name__ == '__main__':
     main(sys.argv[1:])
