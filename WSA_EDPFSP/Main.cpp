@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 	double alpha = 0.9;
 	double beta = 0.2;
 
-	string path;
+	string path = "C:users/edu4r/desktop/test2/20_2_5.txt";
 
 	switch (argc) {
 		case 3:
