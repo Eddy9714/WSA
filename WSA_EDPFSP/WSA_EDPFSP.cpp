@@ -710,7 +710,8 @@ void WSA_EDPFSP::localSearch(MPoint<Solution*, Point<double>>& solution, unsigne
 	}
 
 	exploitation(solution);
-	currentNfes++;
+
+	if(!full) currentNfes++;
 
 	solution.y = info.score;
 }
@@ -1016,8 +1017,6 @@ void WSA_EDPFSP::ECFFS(Solution* solution) {
 
 void WSA_EDPFSP::exploitation(MPoint<Solution*, Point<double>>& solution) {
 
-	unsigned int tmp = 0;
-
 	double eImprovement = 0, partialEImprovement;
 
 	for (unsigned short i = 0; i < info.positions.size(); i++) {
@@ -1027,7 +1026,6 @@ void WSA_EDPFSP::exploitation(MPoint<Solution*, Point<double>>& solution) {
 	}
 
 	info.score.y -= eImprovement;
-
 }
 
 double WSA_EDPFSP::partialExploitation(Solution* solution, vector<unsigned short>& factory) {

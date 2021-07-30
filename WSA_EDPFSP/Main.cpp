@@ -7,7 +7,7 @@ using chrono::system_clock;
 using chrono::duration_cast;
 
 namespace fs = filesystem;
-namespace fs = experimental::filesystem;
+//namespace fs = experimental::filesystem;
 
 int main(int argc, char* argv[])
 {
@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 	double alpha = 0.9;
 	double beta = 0.2;
 
-	string path = "C:users/edu4r/desktop/test2/20_2_5.txt";
+	string path = "C:/users/edu4r/desktop/test2/20_2_5.txt";
 
 	switch (argc) {
 		case 3:
@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 			break;
 		case 1:
 			cerr << "run with params [path] [seed*]" << endl;
-			exit(-1);
+			//exit(-1);
 	}
 		
 	WSA_EDPFSP executor(path);
