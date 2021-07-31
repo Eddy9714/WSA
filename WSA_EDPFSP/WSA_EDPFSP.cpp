@@ -710,8 +710,7 @@ void WSA_EDPFSP::localSearch(MPoint<Solution*, Point<double>>& solution, unsigne
 	}
 
 	exploitation(solution);
-
-	if(!full) currentNfes++;
+	currentNfes++;
 
 	solution.y = info.score;
 }
